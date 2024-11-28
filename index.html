@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mSocial Dashboards</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="favicon.webp">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .fixed-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .content {
+      flex-grow: 1;
+      margin-top: 70px; /* Adjust based on header height */
+    }
+
+    .embed-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .btn-toggle.active {
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="fixed-header p-3">
+  <div class="container d-flex justify-content-center">
+    <div class="btn-group" id="buttonContainer" role="group" aria-label="Embed categories">
+      <!-- Buttons will be dynamically generated here -->
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="embed-container">
+    <iframe id="embedFrame" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script>
+  // Example embed schema, replace with your dynamic data source
+  const embedSchema = {
+    "embeds": [
+      {
+        "categ": "Overview",
+        "url": "https://lookerstudio.google.com/embed/reporting/d4752a2f-4e9f-4439-9cae-8da140011f49/page/epoWE"
+      },
+      {
+        "categ": "Finance",
+        "url": "https://lookerstudio.google.com/embed/reporting/2278e75f-0d58-46b7-a828-9411c71f05c3/page/HvoWE"
+      },
+      {
+        "categ": "Marketing",
+        "url": "https://lookerstudio.google.com/embed/reporting/3cf978e7-d570-4102-814f-1e9d59f0e9e3/page/zxoWE"
+      },
+      {
+        "categ": "Sales",
+        "url": "https://lookerstudio.google.com/embed/reporting/14e83678-f316-470e-8b93-de0c69d6d940/page/tyoWE"
+      },
+      {
+        "categ": "Operations",
+        "url": "https://lookerstudio.google.com/embed/reporting/c58d0576-483c-4e0f-8e69-9689902b23e5/page/E1oWE"
+      },
+      {
+        "categ": "HR",
+        "url": "https://lookerstudio.google.com/embed/reporting/4f4310c4-4d36-476a-884c-c466127c5723/page/81oWE"
+      },
+      {
+        "categ": "Technology",
+        "url": "https://lookerstudio.google.com/embed/reporting/cf41545e-9ef9-448a-a8c5-f42ab4ac16cc/page/p2oWE"
+      }
+    ]
+  };
+
+  // Dynamically generate buttons and load the first embed by default
+  function generatePage() {
+    const buttonContainer = document.getElementById('buttonContainer');
+
+    // Generate buttons based on the schema
+    embedSchema.embeds.forEach((embed, index) => {
+      const button = document.createElement('button');
+      button.className = `btn btn-outline-primary btn-toggle ${index === 0 ? 'active' : ''} `; // Add spacing between buttons
+      button.textContent = embed.categ;
+      button.onclick = () => loadEmbed(index);
+      buttonContainer.appendChild(button);
+    });
+
+    // Load the first embed by default
+    loadEmbed(0);
+  }
+
+  // Load embed based on index and update active button state
+  function loadEmbed(index) {
+    const embedFrame = document.getElementById('embedFrame');
+    embedFrame.src = embedSchema.embeds[index].url;
+
+    // Update button states
+    document.querySelectorAll('.btn-toggle').forEach((btn, i) => {
+      btn.classList.toggle('active', i === index);
+    });
+  }
+
+  // Initialize the page on load
+  document.addEventListener('DOMContentLoaded', generatePage);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
